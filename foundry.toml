@@ -21,7 +21,7 @@ remappings = [
   "p256-verifier/=node_modules/p256-verifier/",
   "murky/=node_modules/murky/src/",
   "solidity-stringutils/=node_modules/solidity-stringutils/",
-  "@taiko/blacklist/=node_modules/@taiko/supplementary-contracts/contracts/blacklist/",
+  "@taiko/blacklist/=node_modules/taiko-mono/packages/supplementary-contracts/contracts/blacklist/",
   "openzeppelin-foundry-upgrades/=node_modules/openzeppelin-foundry-upgrades/src/",
 ]
 
