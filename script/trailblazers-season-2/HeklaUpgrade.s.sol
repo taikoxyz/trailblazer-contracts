@@ -28,7 +28,7 @@ contract HeklaUpgradeScript is Script {
         recruitmentV1 = BadgeRecruitment(recruitmentAddress);
 
         recruitmentV1.upgradeToAndCall(
-            address(new BadgeRecruitmentV2()), abi.encodeCall(BadgeRecruitmentV2.version, ())
+        address(new BadgeRecruitmentV2()), abi.encodeCall(BadgeRecruitmentV2.version, ())
         );
 
         recruitmentV2 = BadgeRecruitmentV2(address(recruitmentV1));
@@ -37,12 +37,11 @@ contract HeklaUpgradeScript is Script {
 
         // assign permission to korbi's hekla address as an owner:
 
-  vm.startBroadcast(deployerPrivateKey);
+        vm.startBroadcast(deployerPrivateKey);
         recruitmentV2 = BadgeRecruitmentV2(recruitmentAddress);
 
         recruitmentV2.grantRole(
-            recruitmentV2.DEFAULT_ADMIN_ROLE(),
-            0xFE5124f99f544a84C3C6D0A26339a04937cD2Ff4
+            recruitmentV2.DEFAULT_ADMIN_ROLE(), 0xFE5124f99f544a84C3C6D0A26339a04937cD2Ff4
         );
     }
 }

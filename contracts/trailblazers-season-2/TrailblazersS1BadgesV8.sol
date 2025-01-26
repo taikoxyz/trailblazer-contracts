@@ -70,10 +70,8 @@ contract TrailblazersBadgesV8 is TrailblazersBadgesV7 {
             unlockTimestamps[_tokenId] = season3EndTimestamp;
         }
 
-        recruitmentContractV2.startRecruitment(_msgSender(),
-         _badgeId, _tokenId);
+        recruitmentContractV2.startRecruitment(_msgSender(), _badgeId, _tokenId);
     }
-
 
     function isLocked(uint256 tokenId) public view virtual returns (bool) {
         if (unlockTimestamps[tokenId] > 0 && block.timestamp < season2EndTimestamp) {

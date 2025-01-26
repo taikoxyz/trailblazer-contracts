@@ -17,7 +17,7 @@ contract UpgradeV2 is Script {
     uint256 public deployerPrivateKey;
     address public deployerAddress;
 
-    address tokenAddress = 0x52A7dBeC10B404548066F59DE89484e27b4181dA;
+    address s2Badges = 0xC50b384b26a0118A6F896Cb58C331e83d51973d2;
     TrailblazersBadgesS2 public token;
 
     function setUp() public {
@@ -31,7 +31,7 @@ contract UpgradeV2 is Script {
 
     function run() public {
         vm.startBroadcast(deployerPrivateKey);
-        token = TrailblazersBadgesS2(tokenAddress);
+        token = TrailblazersBadgesS2(s2Badges);
 
         token.upgradeToAndCall(
             address(new TrailblazersBadgesS2()), abi.encodeCall(TrailblazersBadgesS2.version, ())

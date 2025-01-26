@@ -36,8 +36,7 @@ contract TrailblazersBadgesV6 is TrailblazersBadgesV5 {
     /// @notice Modifier to ensure a badge isn't locked on a recruitment for that season
     /// @param tokenId Badge token id
     modifier isNotLocked(uint256 tokenId) virtual {
-        if (unlockTimestamps[tokenId] > 0 && 
-        block.timestamp < season2EndTimestamp) {
+        if (unlockTimestamps[tokenId] > 0 && block.timestamp < season2EndTimestamp) {
             // s2
             revert BADGE_LOCKED();
         } else if (
