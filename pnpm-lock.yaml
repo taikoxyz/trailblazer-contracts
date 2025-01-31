@@ -57,8 +57,8 @@ importers:
         specifier: github:Arachnid/solidity-stringutils
         version: https://codeload.github.com/Arachnid/solidity-stringutils/tar.gz/4b2fcc43fa0426e19ce88b1f1ec16f5903a2e461
       taiko-mono:
-        specifier: git+https://github.com/taikoxyz/taiko-mono.git/
-        version: https://codeload.github.com/taikoxyz/taiko-mono/tar.gz/f5da48ef47bcb8268b5812a8b749f3e0d9256cf6
+        specifier: git+https://github.com/taikoxyz/taiko-mono.git
+        version: https://codeload.github.com/taikoxyz/taiko-mono/tar.gz/729fd33828a0dbdcfa1a2b0a81c59bdc4be04697
     devDependencies:
       '@types/node':
         specifier: ^20.11.30
@@ -2484,8 +2484,8 @@ packages:
     resolution: {integrity: sha512-9kY+CygyYM6j02t5YFHbNz2FN5QmYGv9zAjVp4lCDjlCw7amdckXlEt/bjMhUIfj4ThGRE4gCUH5+yGnNuPo5A==}
     engines: {node: '>=10.0.0'}
 
-  taiko-mono@https://codeload.github.com/taikoxyz/taiko-mono/tar.gz/f5da48ef47bcb8268b5812a8b749f3e0d9256cf6:
-    resolution: {tarball: https://codeload.github.com/taikoxyz/taiko-mono/tar.gz/f5da48ef47bcb8268b5812a8b749f3e0d9256cf6}
+  taiko-mono@https://codeload.github.com/taikoxyz/taiko-mono/tar.gz/729fd33828a0dbdcfa1a2b0a81c59bdc4be04697:
+    resolution: {tarball: https://codeload.github.com/taikoxyz/taiko-mono/tar.gz/729fd33828a0dbdcfa1a2b0a81c59bdc4be04697}
     version: 0.23.0
 
   text-table@0.2.0:
@@ -5916,7 +5916,7 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
 
-  taiko-mono@https://codeload.github.com/taikoxyz/taiko-mono/tar.gz/f5da48ef47bcb8268b5812a8b749f3e0d9256cf6: {}
+  taiko-mono@https://codeload.github.com/taikoxyz/taiko-mono/tar.gz/729fd33828a0dbdcfa1a2b0a81c59bdc4be04697: {}
 
   text-table@0.2.0: {}
 
