@@ -61,6 +61,12 @@ contract UtilsScript is Script {
             string.concat(root, "/deployments/trailblazers-season-2/", lowercaseNetworkKey, ".json");
     }
 
+    function getFbaContractJsonLocation() public view returns (string memory) {
+        string memory root = vm.projectRoot();
+        return
+            string.concat(root, "/deployments/faction-battle-arena/", lowercaseNetworkKey, ".json");
+    }
+
     function getBlacklist() public view returns (IMinimalBlacklist blacklistAddress) {
         if (block.chainid == 167_000) {
             // mainnet blacklist address
