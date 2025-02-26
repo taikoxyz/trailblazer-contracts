@@ -48,11 +48,10 @@ contract FactionBattleArenaTest is Test {
     uint64 constant EXECUTE_TIME = 20_000;
     TrailblazersBadgesV8 public s1Badges;
 
-        TrailblazersBadgesS2 public s2Badges;
+    TrailblazersBadgesS2 public s2Badges;
 
     BadgeRecruitment public recruitmentV1;
     BadgeRecruitmentV2 public recruitment;
-
 
     uint256 public SEASON_2_END = 2_000_000_000;
     uint256 public SEASON_3_END = 3_000_000_000;
@@ -83,7 +82,6 @@ contract FactionBattleArenaTest is Test {
             abi.encodeCall(TrailblazerBadgesS1MintTo.call, ())
         );
 
-
         // upgrade s1 contract to v4
         s1BadgesV2.upgradeToAndCall(
             address(new TrailblazersBadgesV7()), abi.encodeCall(TrailblazersBadgesV7.version, ())
@@ -113,14 +111,8 @@ contract FactionBattleArenaTest is Test {
         s2Badges = TrailblazersBadgesS2(proxy);
 
         // deploy the recruitment contract
-        BadgeRecruitment.Config memory config = BadgeRecruitment.Config(
-            1 hours,
-            5 minutes,
-            5,
-            3,
-            100,
-            7
-        );
+        BadgeRecruitment.Config memory config =
+            BadgeRecruitment.Config(1 hours, 5 minutes, 5, 3, 100, 7);
 
         impl = address(new BadgeRecruitment());
         proxy = address(
@@ -163,8 +155,8 @@ contract FactionBattleArenaTest is Test {
         s1Badges.setSeason3EndTimestamp(SEASON_3_END);
         assertEq(s1Badges.version(), "V8");
         vm.stopPrank();
-
     }
+
     function setUp() public {
         utils = new UtilsScript();
         utils.setUp();
@@ -172,23 +164,24 @@ contract FactionBattleArenaTest is Test {
 
         _deployBadges();
 
-
         // create whitelist merkle tree
         vm.startPrank(owner);
 
         (mintSigner, mintSignerPk) = makeAddrAndKey("mintSigner");
 
-
         // deploy badge champions
         address impl = address(new FactionBattleArena());
         address proxy = address(
             new ERC1967Proxy(
-                impl, abi.encodeCall(FactionBattleArena.initialize,
-                 FactionBattleArena.Config({
-                    leagueDuration: 1 hours,
-                    s1Badges: address(s1Badges),
-                    s2Badges: address(s2Badges)
-                    }))
+                impl,
+                abi.encodeCall(
+                    FactionBattleArena.initialize,
+                    FactionBattleArena.Config({
+                        leagueDuration: 1 hours,
+                        s1Badges: address(s1Badges),
+                        s2Badges: address(s2Badges)
+                    })
+                )
             )
         );
 
@@ -204,7 +197,7 @@ contract FactionBattleArenaTest is Test {
             vm.startPrank(minters[i]);
             token.mint(abi.encodePacked(r, s, v), BADGE_IDS[i]);
             vm.stopPrank();
-    uint256 tokenId = token.tokenOfOwnerByIndex(minters[i], 0);
+            uint256 tokenId = token.tokenOfOwnerByIndex(minters[i], 0);
             playersToTokenIds[minters[i]] = tokenId;
             playersToBadgeIds[minters[i]] = BADGE_IDS[i];
         }
@@ -240,7 +233,9 @@ contract FactionBattleArenaTest is Test {
         vm.expectRevert();
         badgeChampions.registerParticipant(
             1, // static season 1 set
-            playersToTokenIds[minters[0]], playersToBadgeIds[minters[0]]);
+            playersToTokenIds[minters[0]],
+            playersToBadgeIds[minters[0]]
+        );
         vm.stopPrank();
     }
 
@@ -256,7 +251,9 @@ contract FactionBattleArenaTest is Test {
         vm.prank(minters[0]);
         badgeChampions.registerParticipant(
             1, // static season 1 set
-            playersToTokenIds[minters[0]], playersToBadgeIds[minters[0]]);
+            playersToTokenIds[minters[0]],
+            playersToBadgeIds[minters[0]]
+        );
 
         // check league
         FactionBattleArena.League memory league = badgeChampions.getCurrentLeague();
@@ -276,7 +273,9 @@ contract FactionBattleArenaTest is Test {
         vm.expectRevert();
         badgeChampions.registerParticipant(
             1, // static season 1 set
-            playersToTokenIds[minters[1]], playersToBadgeIds[minters[1]]);
+            playersToTokenIds[minters[1]],
+            playersToBadgeIds[minters[1]]
+        );
         vm.stopPrank();
     }
 
@@ -288,8 +287,10 @@ contract FactionBattleArenaTest is Test {
         for (uint256 i = 0; i < minters.length; i++) {
             vm.prank(minters[i]);
             badgeChampions.registerParticipant(
-            1, // static season 1 set
-            playersToTokenIds[minters[i]], playersToBadgeIds[minters[i]]);
+                1, // static season 1 set
+                playersToTokenIds[minters[i]],
+                playersToBadgeIds[minters[i]]
+            );
         }
 
         // check league
@@ -312,7 +313,7 @@ contract FactionBattleArenaTest is Test {
         vm.stopPrank();
     }
 
-    function test_register_erc1155() public{
+    function test_register_erc1155() public {
         // todo
     }
 }
