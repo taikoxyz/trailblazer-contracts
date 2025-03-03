@@ -156,25 +156,35 @@ contract FactionBattleArena is
         emit LeagueExecuted(currentLeagueId, league.seed);
     }
 
-    function executeLeagueAndStartNext(uint256 _seed) public onlyOwner canAlterLeague {
+    function executeLeagueAndStartNext(uint256 _seed) public
+    //onlyOwner
+    canAlterLeague {
         _executeLeague(_seed);
         _startLeague(block.timestamp);
     }
 
-    function startLeague() public onlyOwner canAlterLeague {
+    function startLeague() public
+    //onlyOwner
+    canAlterLeague {
         _startLeague(block.timestamp);
     }
 
-    function startLeague(uint256 _startTs) public onlyOwner canAlterLeague {
+    function startLeague(uint256 _startTs) public
+    //onlyOwner
+    canAlterLeague {
         _startLeague(_startTs);
     }
 
-    function executeLeague(uint256 _seed) public onlyOwner canAlterLeague {
+    function executeLeague(uint256 _seed) public
+    //onlyOwner
+    canAlterLeague {
         _executeLeague(_seed);
     }
 
     // todo: flush current league
-    function abortLeague() public onlyOwner { }
+    function abortLeague() public
+    //onlyOwner
+    { }
 
     function getCurrentLeague() public view returns (League memory league) {
         return leagues[currentLeagueId];
