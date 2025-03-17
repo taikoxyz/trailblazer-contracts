@@ -70,6 +70,9 @@ contract FactionBattleArena is
     error TOKEN_NOT_OWNED();
     error INVALID_SEASON();
     error TOKEN_ALREADY_REGISTERED();
+error INVALID_TEAM_LENGTH();
+
+uint256 public constant TEAM_LENGTH = 8;
 
     modifier canAlterLeague() {
         if (block.timestamp < leagues[currentLeagueId].executeTime) {
@@ -134,6 +137,20 @@ contract FactionBattleArena is
 
         participants[currentLeagueId][_tokenId] = true;
     }
+
+    function registerTeam(
+        uint256[] memory _badgeSeasons,
+        uint256[] memory _badgeIds,
+        uint256[] memory _tokenIds
+    ) public {
+        if (_badgeSeasons.length != TEAM_LENGTH || _badgeSeasons.length != _badgeIds.length || _badgeIds.length != _tokenIds.length) {
+            revert INVALID_TEAM_LENGTH();
+        }
+        for (uint256 i = 0; i < _badgeIds.length; i++) {
+            registerParticipant(_badgeSeasons[i], _badgeIds[i], _tokenIds[i]);
+        }
+    }
+
 
     // admin methods
 

@@ -6,7 +6,10 @@ import { EventRegister } from "../../../contracts/eventRegister/EventRegister.so
 
 contract DeployEventRegisterScript is Script {
     function run() public {
-        uint256 deployerPrivateKey = vm.envUint("MAINNET_PRIVATE_KEY");
+        uint256 deployerPrivateKey = vm.envUint("HEKLA_PRIVATE_KEY");
+        if (block.chainid == 167_000) {
+        deployerPrivateKey = vm.envUint("MAINNET_PRIVATE_KEY");
+        }
         address deployerAddress = vm.addr(deployerPrivateKey);
 
         vm.startBroadcast(deployerPrivateKey);
