@@ -140,7 +140,9 @@ contract FactionBattleArena is
     function _startLeague(uint256 _startTs) internal {
         currentLeagueId += 1;
         leagues[currentLeagueId] =
-            League({ openTime: _startTs, executeTime: _startTs + config.leagueDuration, seed: 0 });
+            League({ openTime: _startTs,
+            executeTime: _startTs + config.leagueDuration,
+            seed: 0 });
 
         emit LeagueCreated(
             currentLeagueId, leagues[currentLeagueId].openTime, leagues[currentLeagueId].executeTime
