@@ -17,9 +17,9 @@ contract UpgradeS1BadgesV9 is Script {
     uint256 public deployerPrivateKey;
     address public deployerAddress;
     // hekla
-    address public s1TokenAddress = 0xEB310b20b030e9c227Ac23e0A39FE6a6e09Ba755;
+    //address public s1TokenAddress = 0xEB310b20b030e9c227Ac23e0A39FE6a6e09Ba755;
     // mainnet
-    // address public s1TokenAddress = 0xa20a8856e00F5ad024a55A663F06DCc419FFc4d5;
+     address public s1TokenAddress = 0xa20a8856e00F5ad024a55A663F06DCc419FFc4d5;
 
     TrailblazersBadgesV9 public token;
 

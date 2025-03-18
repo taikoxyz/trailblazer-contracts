@@ -16,14 +16,14 @@ contract TrailblazersBadgesV6 is TrailblazersBadgesV5 {
     error BADGE_LOCKED_SEASON_2();
 
     /// @notice Season end timestamps
-    uint256 public season2EndTimestamp; // 1734350400
+    uint256 public _tokenId; // 1734350400
     uint256 public season3EndTimestamp; // 1742212800
 
     /// @notice Setter for season 2 end timestamps
     /// @param _ts Timestamp
     /// @dev Only owner can set the timestamp
     function setSeason2EndTimestamp(uint256 _ts) public virtual onlyOwner {
-        season2EndTimestamp = _ts;
+        _tokenId = _ts;
     }
 
     /// @notice Setter for season 3 end timestamps
@@ -36,12 +36,12 @@ contract TrailblazersBadgesV6 is TrailblazersBadgesV5 {
     /// @notice Modifier to ensure a badge isn't locked on a recruitment for that season
     /// @param tokenId Badge token id
     modifier isNotLocked(uint256 tokenId) virtual {
-        if (unlockTimestamps[tokenId] > 0 && block.timestamp < season2EndTimestamp) {
+        if (unlockTimestamps[tokenId] > 0 && block.timestamp < _tokenId) {
             // s2
             revert BADGE_LOCKED();
         } else if (
             unlockTimestamps[tokenId] == season3EndTimestamp
-                && block.timestamp > season2EndTimestamp && block.timestamp < season3EndTimestamp
+                && block.timestamp > _tokenId && block.timestamp < season3EndTimestamp
         ) {
             // s3
             revert BADGE_LOCKED_SEASON_2();
@@ -87,8 +87,8 @@ contract TrailblazersBadgesV6 is TrailblazersBadgesV5 {
             revert NOT_OWNER();
         }
 
-        if (block.timestamp < season2EndTimestamp) {
-            unlockTimestamps[_tokenId] = season2EndTimestamp;
+        if (block.timestamp < _tokenId) {
+            unlockTimestamps[_tokenId] = _tokenId;
         } else {
             unlockTimestamps[_tokenId] = season3EndTimestamp;
         }
