@@ -19,13 +19,13 @@ contract UpgradeS1BadgesV9 is Script {
     // hekla
     //address public s1TokenAddress = 0xEB310b20b030e9c227Ac23e0A39FE6a6e09Ba755;
     // mainnet
-     address public s1TokenAddress = 0xa20a8856e00F5ad024a55A663F06DCc419FFc4d5;
+    address public s1TokenAddress = 0xa20a8856e00F5ad024a55A663F06DCc419FFc4d5;
 
     TrailblazersBadgesV9 public token;
 
     uint256 public SEASON_2_END_TS = 1_734_350_400;
     uint256 public SEASON_3_END_TS = 1_742_212_800;
-uint256 public SEASON_4_END_TS = 1_750_075_200;
+    uint256 public SEASON_4_END_TS = 1_750_075_200;
 
     function setUp() public {
         utils = new UtilsScript();
