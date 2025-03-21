@@ -22,6 +22,7 @@ contract DeployScript is Script {
     IMinimalBlacklist blacklist = IMinimalBlacklist(0xfA5EA6f9A13532cd64e805996a941F101CCaAc9a);
 
     ERC20Airdrop public airdrop;
+    // only used for hekla deployments
     uint256 constant TOTAL_AVAILABLE_FUNDS = 1000 ether;
 
     // hekla test root
