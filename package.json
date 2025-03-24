@@ -54,7 +54,10 @@
     "tbz:upgradeV8:hekla": "forge clean && pnpm compile && forge script script/trailblazers-season-2/UpgradeS1BadgesV8.s.sol --rpc-url https://rpc.hekla.taiko.xyz --broadcast   --gas-estimate-multiplier 100",
     "fba:hekla": "forge clean && pnpm compile && forge script script/trailblazers-season-2/FactionBattleArena.s.sol --rpc-url https://rpc.hekla.taiko.xyz --broadcast   --gas-estimate-multiplier 200",
     "tbz:upgradeV9:hekla": "forge clean && pnpm compile && forge script script/trailblazers-season-4/UpgradeS1BadgesV9.s.sol --rpc-url https://rpc.hekla.taiko.xyz --broadcast --verify --gas-estimate-multiplier 100",
-    "tbz:upgradeV9:mainnet": "forge clean && pnpm compile && forge script script/trailblazers-season-4/UpgradeS1BadgesV9.s.sol --rpc-url https://rpc.mainnet.taiko.xyz --broadcast --verify --gas-estimate-multiplier 100"
+    "tbz:upgradeV9:mainnet": "forge clean && pnpm compile && forge script script/trailblazers-season-4/UpgradeS1BadgesV9.s.sol --rpc-url https://rpc.mainnet.taiko.xyz --broadcast --verify --gas-estimate-multiplier 100",
+    "tbz:upgradeV10:mainnet": "forge clean && pnpm compile && forge script script/trailblazers-season-4/UpgradeS1BadgesV10.s.sol --rpc-url https://rpc.mainnet.taiko.xyz --broadcast --verify --gas-estimate-multiplier 100",
+    "tbz:upgradeV11:hekla": "forge clean && pnpm compile && forge script script/trailblazers-season-4/UpgradeS1BadgesV11.s.sol --rpc-url https://rpc.hekla.taiko.xyz --broadcast --verify --gas-estimate-multiplier 100",
+    "tbz:upgradeV11:mainnet": "forge clean && pnpm compile && forge script script/trailblazers-season-4/UpgradeS1BadgesV11.s.sol --rpc-url https://rpc.mainnet.taiko.xyz --broadcast --verify --gas-estimate-multiplier 100"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
