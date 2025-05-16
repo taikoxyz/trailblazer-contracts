@@ -503,35 +503,34 @@ contract TrailblazersS1BadgesV11Test is Test {
             )
         );
         s1BadgesV10.transferFrom(minters[1], minter, tokenId);
-
     }
 
     function test_v11() public {
-       test_s4_monkCase();
+        test_s4_monkCase();
         _upgradeV11();
         vm.warp(SEASON_3_END + 1);
 
-       uint256 tokenId = s1BadgesV11.tokenOfOwnerByIndex(minters[0], 0);
+        uint256 tokenId = s1BadgesV11.tokenOfOwnerByIndex(minters[0], 0);
         uint256 secondTokenId = s1BadgesV11.tokenOfOwnerByIndex(minters[1], 0);
 
-       assertFalse(s1BadgesV11.isLocked(tokenId));
-         assertFalse(s1BadgesV11.isLocked(secondTokenId));
+        assertFalse(s1BadgesV11.isLocked(tokenId));
+        assertFalse(s1BadgesV11.isLocked(secondTokenId));
 
-         // re-enable recruitment cycle
-         vm.prank(owner);
-                 recruitment.forceDisableAllRecruitments();
-         uint256[] memory enabledBadgeIds = new uint256[](1);
+        // re-enable recruitment cycle
+        vm.prank(owner);
+        recruitment.forceDisableAllRecruitments();
+        uint256[] memory enabledBadgeIds = new uint256[](1);
         uint256 monksBadgeId = s1BadgesV8.BADGE_MONKS();
         enabledBadgeIds[0] = monksBadgeId;
         vm.prank(owner);
         recruitment.enableRecruitments(enabledBadgeIds);
 
-         // conduct a recruitment
-            vm.startPrank(minters[0]);
+        // conduct a recruitment
+        vm.startPrank(minters[0]);
         s1BadgesV11.startRecruitment(s1BadgesV11.BADGE_MONKS(), tokenId);
         assertEq(s1BadgesV11.unlockTimestamps(tokenId), SEASON_4_END);
         vm.stopPrank();
-// check updated states
+        // check updated states
         assertTrue(s1BadgesV11.isLocked(tokenId));
         assertFalse(s1BadgesV11.isLocked(secondTokenId));
         assertEq(s1BadgesV11.unlockTimestamps(tokenId), SEASON_4_END);
