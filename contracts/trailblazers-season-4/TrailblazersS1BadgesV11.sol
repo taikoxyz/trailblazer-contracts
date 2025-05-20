@@ -10,7 +10,6 @@ contract TrailblazersBadgesV11 is TrailblazersBadgesV10 {
         return "V11";
     }
 
-
     /// @notice Check if a badge is locked
     /// @param _tokenId Badge token id
     /// @return True if locked
@@ -30,7 +29,9 @@ contract TrailblazersBadgesV11 is TrailblazersBadgesV10 {
     /// @param _tokenId Badge token id
     modifier isNotLockedV11(uint256 _tokenId) virtual {
         if (isLocked(_tokenId)) {
-            revert BADGE_STILL_LOCKED(getCurrentSeasonId(), getCurrentSeasonEndTimestamp(), block.timestamp);
+            revert BADGE_STILL_LOCKED(
+                getCurrentSeasonId(), getCurrentSeasonEndTimestamp(), block.timestamp
+            );
         }
         _;
     }
@@ -57,14 +58,7 @@ contract TrailblazersBadgesV11 is TrailblazersBadgesV10 {
     /// @notice Start recruitment for a badge
     /// @param _badgeId Badge ID
     /// @param _tokenId Token ID
-    function startRecruitment(
-        uint256 _badgeId,
-        uint256 _tokenId
-    )
-        public
-        virtual
-        override
-    {
+    function startRecruitment(uint256 _badgeId, uint256 _tokenId) public virtual override {
         if (recruitmentLockDuration == 0) {
             revert RECRUITMENT_LOCK_DURATION_NOT_SET();
         }
@@ -77,7 +71,7 @@ contract TrailblazersBadgesV11 is TrailblazersBadgesV10 {
         // monk patch
         if (_badgeId == BADGE_MONKS && seasonEndTimestamps[3] == unlockTimestamps[_tokenId]) {
             unlockTimestamps[_tokenId] = seasonEndTimestamps[4];
-        } else if (isLocked(_tokenId)){
+        } else if (isLocked(_tokenId)) {
             revert BADGE_STILL_LOCKED(getCurrentSeasonId(), seasonEndTimestamp, block.timestamp);
         } else {
             unlockTimestamps[_tokenId] = seasonEndTimestamp;
@@ -85,5 +79,4 @@ contract TrailblazersBadgesV11 is TrailblazersBadgesV10 {
 
         recruitmentContractV2.startRecruitment(_msgSender(), _badgeId, _tokenId);
     }
-
 }
