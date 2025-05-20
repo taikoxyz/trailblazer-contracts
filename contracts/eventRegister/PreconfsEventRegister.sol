@@ -80,6 +80,16 @@ contract PreconfsEventRegister is Ownable2StepUpgradeable, AccessControlUpgradea
      */
     event RegistrationClosed(uint256 eventId);
 
+    /// @notice Errors
+    error bla();
+
+    error EventNotFound();
+    error AlreadyOpen();
+    error AlreadyClosed();
+    error RegistrationsClosed();
+    error NotReadyForStage2();
+    error InvalidPhase();
+
     /**
      * @dev Counter for assigning unique event IDs.
      */
@@ -163,8 +173,12 @@ contract PreconfsEventRegister is Ownable2StepUpgradeable, AccessControlUpgradea
      * - The caller must have the EVENT_MANAGER_ROLE.
      */
     function openRegistration(uint256 _eventId) external onlyRole(EVENT_MANAGER_ROLE) {
-        require(events[_eventId].exists, "Event not found");
-        require(!events[_eventId].registrationOpen, "Already open");
+        if (events[_eventId].exists == false) {
+            revert EventNotFound();
+        }
+        if (events[_eventId].registrationOpen == true) {
+            revert AlreadyOpen();
+        }
 
         events[_eventId].registrationOpen = true;
         emit RegistrationOpened(_eventId);
@@ -183,8 +197,13 @@ contract PreconfsEventRegister is Ownable2StepUpgradeable, AccessControlUpgradea
      * - The caller must have the EVENT_MANAGER_ROLE.
      */
     function closeRegistration(uint256 _eventId) external onlyRole(EVENT_MANAGER_ROLE) {
-        require(events[_eventId].exists, "Event not found");
-        require(events[_eventId].registrationOpen, "Already closed");
+        if (events[_eventId].exists == false) {
+            revert EventNotFound();
+        }
+
+        if (events[_eventId].registrationOpen == false) {
+            revert AlreadyClosed();
+        }
 
         events[_eventId].registrationOpen = false;
         emit RegistrationClosed(_eventId);
@@ -203,17 +222,23 @@ contract PreconfsEventRegister is Ownable2StepUpgradeable, AccessControlUpgradea
      */
     function register(uint256 _eventId, uint256 _phase) external {
         Event memory currentEvent = events[_eventId];
-        require(currentEvent.exists, "Event not found");
-        require(currentEvent.registrationOpen, "Registrations closed");
 
-        if (_phase == 1){
-require(eventStages[_eventId][_msgSender()] == 0 || eventStages[_eventId][_msgSender()] == 2, "Already in stage 1");
-        } else if (_phase == 2){
-            require(eventStages[_eventId][_msgSender()] == 1, "Not ready for stage 2");
-        } else {
-            revert("Invalid phase");
+        if (currentEvent.exists == false) {
+            revert EventNotFound();
         }
-        
+        if (currentEvent.registrationOpen == false) {
+            revert RegistrationsClosed();
+        }
+
+        if (_phase != 1 && _phase != 2) {
+            revert InvalidPhase();
+        }
+
+        if (_phase == 1 && eventStages[_eventId][_msgSender()] == 1) {
+            revert NotReadyForStage2();
+        } else if (_phase == 2 && eventStages[_eventId][_msgSender()] != 1) {
+            revert NotReadyForStage2();
+        }
 
         isRegistered[_eventId][_msgSender()] = block.timestamp;
         eventStages[_eventId][_msgSender()] = _phase;
@@ -233,9 +258,12 @@ require(eventStages[_eventId][_msgSender()] == 0 || eventStages[_eventId][_msgSe
      */
     function unregister(uint256 _eventId, address _user) external onlyRole(EVENT_MANAGER_ROLE) {
         Event memory currentEvent = events[_eventId];
-        require(currentEvent.exists, "Event not found");
-        require(currentEvent.registrationOpen, "Registrations closed");
-
+        if (currentEvent.exists == false) {
+            revert EventNotFound();
+        }
+        if (currentEvent.registrationOpen == false) {
+            revert RegistrationsClosed();
+        }
         isRegistered[_eventId][_user] = 0;
         emit Unregistered(_user, _eventId);
     }
@@ -284,7 +312,10 @@ require(eventStages[_eventId][_msgSender()] == 0 || eventStages[_eventId][_msgSe
         view
         returns (uint256 id, string memory name, bool registrationOpen_)
     {
-        require(events[_eventId].exists, "Event not found");
+        if (events[_eventId].exists == false) {
+            revert EventNotFound();
+        }
+
         Event memory e = events[_eventId];
         return (e.id, e.name, e.registrationOpen);
     }

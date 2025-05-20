@@ -68,6 +68,7 @@ contract PreconfsEventRegisterTest is Test {
     function testOnlyEventManagersCanCreateEvents() public {
         vm.startPrank(user1);
         vm.expectRevert();
+
         eventRegister.createEvent(eventName1);
         vm.stopPrank();
 
@@ -88,7 +89,7 @@ contract PreconfsEventRegisterTest is Test {
         vm.stopPrank();
 
         vm.startPrank(user1);
-        vm.expectRevert("Registrations closed");
+        vm.expectRevert(PreconfsEventRegister.RegistrationsClosed.selector);
         eventRegister.register(0, STAGE_ONE);
         vm.stopPrank();
 
@@ -130,24 +131,10 @@ contract PreconfsEventRegisterTest is Test {
 
         assertEq(eventRegister.isRegistered(0, user1), 1);
     }
-/* redo
-    function testUserCanRegisterTwice() public {
-        vm.startPrank(manager);
-        eventRegister.createEvent(eventName1);
-        vm.stopPrank();
 
-        vm.startPrank(user1);
-        eventRegister.register(0);
-        assertEq(eventRegister.isRegistered(0, user1), 1);
-        vm.warp(100);
-        eventRegister.register(0);
-        vm.stopPrank();
-        assertEq(eventRegister.isRegistered(0, user1), 100);
-    }
-*/
     function testUserCannotRegisterForNonExistentEvent() public {
         vm.startPrank(user1);
-        vm.expectRevert("Event not found");
+        vm.expectRevert(PreconfsEventRegister.EventNotFound.selector);
         eventRegister.register(999, STAGE_ONE);
         vm.stopPrank();
     }
@@ -202,7 +189,7 @@ contract PreconfsEventRegisterTest is Test {
         vm.startPrank(manager);
         eventRegister.createEvent(eventName1);
         eventRegister.closeRegistration(0);
-        vm.expectRevert("Already closed");
+        vm.expectRevert(PreconfsEventRegister.AlreadyClosed.selector);
         eventRegister.closeRegistration(0);
         vm.stopPrank();
     }
@@ -210,7 +197,7 @@ contract PreconfsEventRegisterTest is Test {
     function testCannotOpenAlreadyOpenRegistration() public {
         vm.startPrank(manager);
         eventRegister.createEvent(eventName1);
-        vm.expectRevert("Already open");
+        vm.expectRevert(PreconfsEventRegister.AlreadyOpen.selector);
         eventRegister.openRegistration(0);
         vm.stopPrank();
     }
@@ -222,7 +209,7 @@ contract PreconfsEventRegisterTest is Test {
         vm.stopPrank();
 
         vm.startPrank(user1);
-        vm.expectRevert("Registrations closed");
+        vm.expectRevert(PreconfsEventRegister.RegistrationsClosed.selector);
         eventRegister.register(0, STAGE_ONE);
         vm.stopPrank();
     }
@@ -295,7 +282,7 @@ contract PreconfsEventRegisterTest is Test {
         vm.stopPrank();
 
         vm.startPrank(user1);
-        vm.expectRevert("Not ready for stage 2");
+        vm.expectRevert(PreconfsEventRegister.NotReadyForStage2.selector);
         eventRegister.register(0, STAGE_TWO);
         vm.stopPrank();
     }
