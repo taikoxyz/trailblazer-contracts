@@ -45,6 +45,8 @@ contract PreconfsEventRegister is Ownable2StepUpgradeable, AccessControlUpgradea
      */
     mapping(uint256 eventId => mapping(address registrant => uint256 timestamp)) public isRegistered;
 
+    mapping(uint256 eventId => mapping(address registrant => uint256 stage)) public eventStages;
+
     /**
      * @dev Emitted when a new event is created.
      * @param id The unique identifier of the created event.
@@ -192,21 +194,30 @@ contract PreconfsEventRegister is Ownable2StepUpgradeable, AccessControlUpgradea
      * @notice Allows a user to register for a specific event.
      * @dev Emits a Registered event upon successful registration.
      * @param _eventId The unique identifier of the event to register for.
-     *
+     * @param _phase The phase of the event (1=> pre, 2=> post).
      * Requirements:
      *
      * - The event with `_eventId` must exist.
      * - Registrations for the event must be open.
      * - The caller must not have already registered for the event.
      */
-    function register(uint256 _eventId) external {
+    function register(uint256 _eventId, uint256 _phase) external {
         Event memory currentEvent = events[_eventId];
         require(currentEvent.exists, "Event not found");
         require(currentEvent.registrationOpen, "Registrations closed");
 
-        isRegistered[_eventId][msg.sender] = block.timestamp;
+        if (_phase == 1){
+require(eventStages[_eventId][_msgSender()] == 0 || eventStages[_eventId][_msgSender()] == 2, "Already in stage 1");
+        } else if (_phase == 2){
+            require(eventStages[_eventId][_msgSender()] == 1, "Not ready for stage 2");
+        } else {
+            revert("Invalid phase");
+        }
+        
 
-        emit Registered(msg.sender, _eventId);
+        isRegistered[_eventId][_msgSender()] = block.timestamp;
+        eventStages[_eventId][_msgSender()] = _phase;
+        emit Registered(_msgSender(), _eventId);
     }
 
     /**

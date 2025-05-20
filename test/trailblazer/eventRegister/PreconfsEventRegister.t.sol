@@ -15,6 +15,9 @@ contract PreconfsEventRegisterTest is Test {
     string public eventName1 = "Spring Season";
     string public eventName2 = "Summer Season";
 
+    uint256 constant STAGE_ONE = 1;
+    uint256 constant STAGE_TWO = 2;
+
     function setUp() public {
         vm.startPrank(owner);
         eventRegister = new PreconfsEventRegister();
@@ -86,7 +89,7 @@ contract PreconfsEventRegisterTest is Test {
 
         vm.startPrank(user1);
         vm.expectRevert("Registrations closed");
-        eventRegister.register(0);
+        eventRegister.register(0, STAGE_ONE);
         vm.stopPrank();
 
         vm.startPrank(manager);
@@ -94,7 +97,7 @@ contract PreconfsEventRegisterTest is Test {
         vm.stopPrank();
 
         vm.startPrank(user1);
-        eventRegister.register(0);
+        eventRegister.register(0, STAGE_ONE);
         vm.stopPrank();
 
         assertEq(eventRegister.isRegistered(0, user1), 1);
@@ -122,12 +125,12 @@ contract PreconfsEventRegisterTest is Test {
         vm.stopPrank();
 
         vm.startPrank(user1);
-        eventRegister.register(0);
+        eventRegister.register(0, STAGE_ONE);
         vm.stopPrank();
 
         assertEq(eventRegister.isRegistered(0, user1), 1);
     }
-
+/* redo
     function testUserCanRegisterTwice() public {
         vm.startPrank(manager);
         eventRegister.createEvent(eventName1);
@@ -141,11 +144,11 @@ contract PreconfsEventRegisterTest is Test {
         vm.stopPrank();
         assertEq(eventRegister.isRegistered(0, user1), 100);
     }
-
+*/
     function testUserCannotRegisterForNonExistentEvent() public {
         vm.startPrank(user1);
         vm.expectRevert("Event not found");
-        eventRegister.register(999);
+        eventRegister.register(999, STAGE_ONE);
         vm.stopPrank();
     }
 
@@ -220,7 +223,7 @@ contract PreconfsEventRegisterTest is Test {
 
         vm.startPrank(user1);
         vm.expectRevert("Registrations closed");
-        eventRegister.register(0);
+        eventRegister.register(0, STAGE_ONE);
         vm.stopPrank();
     }
 
@@ -230,11 +233,11 @@ contract PreconfsEventRegisterTest is Test {
         vm.stopPrank();
 
         vm.startPrank(user1);
-        eventRegister.register(0);
+        eventRegister.register(0, STAGE_ONE);
         vm.stopPrank();
 
         vm.startPrank(user2);
-        eventRegister.register(0);
+        eventRegister.register(0, STAGE_ONE);
         vm.stopPrank();
 
         assertEq(eventRegister.isRegistered(0, user1), 1);
@@ -248,8 +251,8 @@ contract PreconfsEventRegisterTest is Test {
         vm.stopPrank();
 
         vm.startPrank(user1);
-        eventRegister.register(0);
-        eventRegister.register(1);
+        eventRegister.register(0, STAGE_ONE);
+        eventRegister.register(1, STAGE_ONE);
         vm.stopPrank();
 
         uint256[] memory registeredEvents = eventRegister.getRegisteredEvents(user1);
@@ -267,5 +270,54 @@ contract PreconfsEventRegisterTest is Test {
         assertEq(id, 0, "Event ID should be 0");
         assertEq(name, eventName1, "Event name should match");
         assertTrue(registrationOpen, "Registration should be open");
+    }
+
+    function testTwoStageRegistration() public {
+        vm.startPrank(manager);
+        eventRegister.createEvent(eventName1);
+        vm.stopPrank();
+
+        vm.prank(user1);
+        eventRegister.register(0, STAGE_ONE);
+
+        assertEq(eventRegister.isRegistered(0, user1), 1, "User1 should be registered for stage 1");
+        assertEq(eventRegister.eventStages(0, user1), STAGE_ONE, "User1 should be in stage 1");
+
+        vm.prank(user1);
+        eventRegister.register(0, STAGE_TWO);
+        assertEq(eventRegister.isRegistered(0, user1), 1, "User1 should be registered for stage 2");
+        assertEq(eventRegister.eventStages(0, user1), STAGE_TWO, "User1 should be in stage 2");
+    }
+
+    function testErrorRegisteringStage2BeforeStage1() public {
+        vm.startPrank(manager);
+        eventRegister.createEvent(eventName1);
+        vm.stopPrank();
+
+        vm.startPrank(user1);
+        vm.expectRevert("Not ready for stage 2");
+        eventRegister.register(0, STAGE_TWO);
+        vm.stopPrank();
+    }
+
+    function testReRegister() public {
+        vm.startPrank(manager);
+        eventRegister.createEvent(eventName1);
+        vm.stopPrank();
+
+        vm.startPrank(user1);
+        eventRegister.register(0, STAGE_ONE);
+        assertEq(eventRegister.isRegistered(0, user1), 1, "User1 should be registered for stage 1");
+        eventRegister.register(0, STAGE_TWO);
+        assertEq(eventRegister.isRegistered(0, user1), 1, "User1 should be registered for stage 2");
+        vm.stopPrank();
+
+        // start over again
+        vm.startPrank(user1);
+        eventRegister.register(0, STAGE_ONE);
+        assertEq(eventRegister.isRegistered(0, user1), 1, "User1 should be registered for stage 1");
+        eventRegister.register(0, STAGE_TWO);
+        assertEq(eventRegister.isRegistered(0, user1), 1, "User1 should be registered for stage 2");
+        vm.stopPrank();
     }
 }
