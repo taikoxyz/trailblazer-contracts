@@ -122,7 +122,7 @@ contract PhasedEventRegister is Ownable2StepUpgradeable, AccessControlUpgradeabl
         _validateIds(_eventId, _phaseId);
         if (!phaseOpen[_eventId][_phaseId]) revert PHASE_CLOSED();
         registrations[_eventId][_phaseId][msg.sender] = block.timestamp;
-        emit Registered(msg.sender, _eventId, _phaseId);
+        emit Registered(_msgSender(), _eventId, _phaseId);
     }
 
     /**
