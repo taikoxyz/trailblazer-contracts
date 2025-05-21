@@ -31,6 +31,10 @@ contract PhasedEventRegister is Ownable2StepUpgradeable, AccessControlUpgradeabl
 
     uint256 private nextEventId;
 
+    error PHASE_CLOSED();
+    error INVALID_EVENT_ID();
+    error INVALID_PHASE_ID();
+
     /**
      * @notice Initializes the contract and grants roles to the deployer.
      * @dev Grants `DEFAULT_ADMIN_ROLE` and `EVENT_MANAGER_ROLE` to the deployer.
@@ -116,8 +120,7 @@ contract PhasedEventRegister is Ownable2StepUpgradeable, AccessControlUpgradeabl
      */
     function register(uint256 _eventId, uint256 _phaseId) external {
         _validateIds(_eventId, _phaseId);
-        require(phaseOpen[_eventId][_phaseId], "Phase closed");
-
+        if (!phaseOpen[_eventId][_phaseId]) revert PHASE_CLOSED();
         registrations[_eventId][_phaseId][msg.sender] = block.timestamp;
         emit Registered(msg.sender, _eventId, _phaseId);
     }
@@ -145,11 +148,9 @@ contract PhasedEventRegister is Ownable2StepUpgradeable, AccessControlUpgradeabl
         view
         returns (bool[] memory registered)
     {
-        require(_eventId > 0 && _eventId <= nextEventId, "Invalid event ID");
-
+        if (!(_eventId > 0 && _eventId <= nextEventId)) revert INVALID_EVENT_ID();
         uint256 total = events[_eventId].totalPhases;
         registered = new bool[](total);
-
         for (uint256 i = 1; i <= total; i++) {
             registered[i - 1] = registrations[_eventId][i][_user] > 0;
         }
@@ -167,7 +168,7 @@ contract PhasedEventRegister is Ownable2StepUpgradeable, AccessControlUpgradeabl
         view
         returns (uint256 id, string memory name, uint256 totalPhases)
     {
-        require(_eventId > 0 && _eventId <= nextEventId, "Invalid event ID");
+        if (!(_eventId > 0 && _eventId <= nextEventId)) revert INVALID_EVENT_ID();
         Event memory e = events[_eventId];
         return (e.id, e.name, e.totalPhases);
     }
@@ -176,7 +177,7 @@ contract PhasedEventRegister is Ownable2StepUpgradeable, AccessControlUpgradeabl
      * @dev Validates event and phase IDs.
      */
     function _validateIds(uint256 _eventId, uint256 _phaseId) internal view {
-        require(_eventId > 0 && _eventId <= nextEventId, "Invalid event ID");
-        require(_phaseId > 0 && _phaseId <= events[_eventId].totalPhases, "Invalid phase ID");
+        if (!(_eventId > 0 && _eventId <= nextEventId)) revert INVALID_EVENT_ID();
+        if (!(_phaseId > 0 && _phaseId <= events[_eventId].totalPhases)) revert INVALID_PHASE_ID();
     }
 }

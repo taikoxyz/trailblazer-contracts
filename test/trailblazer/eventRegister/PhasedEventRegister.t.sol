@@ -97,8 +97,29 @@ contract PhasedEventRegisterTest is Test {
         reg.createEvent("Test Event", 1);
         vm.stopPrank();
         vm.startPrank(user1);
-        vm.expectRevert();
+        vm.expectRevert(PhasedEventRegister.INVALID_PHASE_ID.selector);
         reg.register(1, 2); // phase 2 does not exist
+        vm.stopPrank();
+    }
+
+    function testInvalidEventId() public {
+        vm.startPrank(user1);
+        vm.expectRevert(PhasedEventRegister.INVALID_EVENT_ID.selector);
+        reg.getEvent(0);
+        vm.stopPrank();
+        vm.startPrank(user1);
+        vm.expectRevert(PhasedEventRegister.INVALID_EVENT_ID.selector);
+        reg.getRegistrationStatus(0, user1);
+        vm.stopPrank();
+    }
+
+    function testPhaseClosedCustomError() public {
+        vm.startPrank(manager);
+        reg.createEvent("Test Event", 1);
+        vm.stopPrank();
+        vm.startPrank(user1);
+        vm.expectRevert(PhasedEventRegister.PHASE_CLOSED.selector);
+        reg.register(1, 1);
         vm.stopPrank();
     }
 }
