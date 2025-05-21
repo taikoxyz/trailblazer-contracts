@@ -50,15 +50,20 @@ contract PhasedEventRegisterTest is Test {
     function testRegisterAndUnregister() public {
         vm.startPrank(manager);
         reg.createEvent("Test Event", 1);
+        reg.openPhase(1, 1); // Open phase before registration
         vm.stopPrank();
+
         vm.startPrank(user1);
         reg.register(1, 1);
         vm.stopPrank();
+
         bool[] memory status = reg.getRegistrationStatus(1, user1);
         assertTrue(status[0]);
+
         vm.startPrank(manager);
         reg.unregister(1, 1, user1);
         vm.stopPrank();
+
         status = reg.getRegistrationStatus(1, user1);
         assertFalse(status[0]);
     }

@@ -80,7 +80,7 @@ contract PhasedEventRegister is Ownable2StepUpgradeable, AccessControlUpgradeabl
         events[eventId] = Event({ id: eventId, name: _name, totalPhases: _totalPhases });
 
         for (uint256 i = 1; i <= _totalPhases; i++) {
-            phaseOpen[eventId][i] = true;
+            phaseOpen[eventId][i] = false;
             emit PhaseOpened(eventId, i);
         }
 
