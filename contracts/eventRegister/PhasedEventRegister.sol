@@ -121,7 +121,7 @@ contract PhasedEventRegister is Ownable2StepUpgradeable, AccessControlUpgradeabl
     function register(uint256 _eventId, uint256 _phaseId) external {
         _validateIds(_eventId, _phaseId);
         if (!phaseOpen[_eventId][_phaseId]) revert PHASE_CLOSED();
-        registrations[_eventId][_phaseId][msg.sender] = block.timestamp;
+        registrations[_eventId][_phaseId][_msgSender()] = block.timestamp;
         emit Registered(_msgSender(), _eventId, _phaseId);
     }
 
