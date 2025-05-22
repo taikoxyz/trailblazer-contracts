@@ -19,9 +19,9 @@ contract PhasedEventRegister is Ownable2StepUpgradeable, AccessControlUpgradeabl
         uint256 totalPhases;
     }
 
-    mapping(uint256 eventId => Event event) public events;
-    mapping(uint256 => mapping(uint256 => bool)) public phaseOpen;
-    mapping(uint256 => mapping(uint256 => mapping(address => uint256))) public registrations;
+    mapping(uint256 eventId => Event) public events;
+    mapping(uint256 eventId => mapping(uint256 phaseId => bool isOpen)) public phaseOpen;
+    mapping(uint256 eventId => mapping(uint256 phaseId => mapping(address registrant => uint256 timestamp))) public registrations;
 
     event EventCreated(uint256 indexed id, string name);
     event Registered(address indexed registrant, uint256 indexed eventId, uint256 indexed phaseId);
