@@ -52,3 +52,5 @@ data/snaefell/whitelist/hardhat.csv
 data/snaefell/whitelist/holesky.csv
 data/snaefell/whitelist/mainnet.csv
 data/snaefell/whitelist/*.json
+out
+.github/prompts

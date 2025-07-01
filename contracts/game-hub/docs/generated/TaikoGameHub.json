@@ -1,0 +1,1 @@
+{"userdoc":{"notice":"TaikoGameHub - Central game management contract with session management, player locking, and ranked winners"},"devdoc":{"title":"TaikoGameHub","details":"See contracts/game-hub/TaikoGameHub.sol for complete NatSpec documentation with @notice, @param, and @return tags"}}
