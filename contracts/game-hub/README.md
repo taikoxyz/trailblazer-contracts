@@ -1,8 +1,8 @@
-# TaikoTaikoGameHub - Taiko Gaming Ecosystem
+# TaikoGameHub - Taiko Gaming Ecosystem
 
 ## Overview
 
-The TaikoTaikoGameHub is a central, upgradeable smart contract that serves as the interface for third-party games to integrate into the Taiko gaming ecosystem. It provides a comprehensive session management system with player locking, whitelisting, ranked winners, and draw support.
+The TaikoGameHub is a central, upgradeable smart contract that serves as the interface for third-party games to integrate into the Taiko gaming ecosystem. It provides a comprehensive session management system with player locking, whitelisting, ranked winners, and draw support.
 
 ## Features
 
@@ -19,13 +19,13 @@ The TaikoTaikoGameHub is a central, upgradeable smart contract that serves as th
 
 ### Core Contracts
 
-1. **TaikoTaikoGameHub.sol** - The main contract that manages all game sessions
-2. **ITaikoTaikoGameHub.sol** - Interface for TaikoTaikoGameHub integration with comprehensive NatSpec documentation
+1. **TaikoGameHub.sol** - The main contract that manages all game sessions
+2. **ITaikoGameHub.sol** - Interface for TaikoGameHub integration with comprehensive NatSpec documentation
 
 ### Contract Structure
 
 ```
-TaikoTaikoGameHub
+TaikoGameHub
 ├── Session Management
 ├── Player Locking
 ├── Whitelist Management
